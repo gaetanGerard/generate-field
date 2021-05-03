@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, abort, session
+from flask import Flask, render_template, request, abort, session, redirect, url_for
 import utils
 
 app = Flask(__name__)
@@ -15,6 +15,9 @@ def hello():
 @app.route('/<plural>')
 @app.route('/<plural>/')
 def plural(plural):
+    if 'namespace' in session and not plural.startswith('cluster'):
+        test = session['namespace']
+        return redirect(url_for('pluralNamespaced', plural=plural, namespace=session['namespace']))
     if plural not in plurals:
         abort(404)
     else:
@@ -24,6 +27,7 @@ def plural(plural):
 @app.route('/<plural>/<namespace>', methods=['GET', 'POST'])
 @app.route('/<plural>/<namespace>/', methods=['GET', 'POST'])
 def pluralNamespaced(plural, namespace):
+    session['namespace'] = namespace
     if plural not in plurals or namespace not in namespaces:
         abort(404)
     else:
