@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Hello, world!</title>
+  </head>
+  <body>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="header">
+        {% block topnav %}
+          <a class="navbar-brand" href="/">TERRAFORM BOARD</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse d-flex justify-content-lg-end">
+            <ul class="navbar-nav" id="navbarSupportedContent">
+              <li class="nav-item">
+                <button type="button" id="settings" class="btn btn-link" data-toggle="modal" data-target="#stateModal" data-trigger="hover" data-content="State settings" data-placement="bottom" rel="popover">
+                  <i data-feather="settings"></i>
+                </button>
+                <div class="modal fade" id="stateModal" tabindex="-1" role="dialog" aria-labelledby="stateModal" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalScrollableTitle">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                          <div class="row">
+                            <div class="col-md-4">.col-md-4</div>
+                            <div class="col-md-4 ml-auto">.col-md-4 .ml-auto</div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-3 ml-auto">.col-md-3 .ml-auto</div>
+                            <div class="col-md-2 ml-auto">.col-md-2 .ml-auto</div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6 ml-auto">.col-md-6 .ml-auto</div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-9">
+                              Level 1: .col-sm-9
+                              <div class="row">
+                                <div class="col-8 col-sm-6">
+                                  Level 2: .col-8 .col-sm-6
+                                </div>
+                                <div class="col-4 col-sm-6">
+                                  Level 2: .col-4 .col-sm-6
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                {% if namespace == None and namespaces != None %}
+                  <button class="btn btn-outline-light dropdown-toggle" {{disable}} type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    All Namespaces
+                  </button>
+                {% else %}
+                  <button class="btn btn-outline-light dropdown-toggle" {{disable}} type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{namespace}}
+                  </button>
+                {% endif %}
+                {% if not plural == "cluster-module-template" and not plural == "cluster-providers" %}
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  {% for namespace in namespaces %}
+                   {% if "system" not in namespace %}
+                    <a class="dropdown-item" href="/{{plural}}/{{namespace}}/">{{namespace}}</a>
+                   {% endif %}
+                  {% endfor %}
+                </div>
+                {% endif %}
+              </li>
+              <li class="nav-item">
+                <button class="btn btn-outline-light my-2 my-sm-0">Sign Out</button>
+              </li>
+            </ul>
+            </div>
+          </div>
+          {% endblock %}
+        </nav>
+
+
+
+        <div id="wrapper">
+
+          <!-- Sidebar -->
+          <nav id="sidebar" class="navbar-dark bg-dark">
+            {% block sidenav %}
+              <ul class="list-unstyled components">
+                  <h6>NAMESPACED RESOURCES</h6>
+                  <li class="active">
+                      <i data-feather="book" class="feather"></i>
+                      <a href="/plans/">Plans</a>
+                  </li>
+                  <li>
+                      <i data-feather="database" class="feather"></i>
+                      <a href="/states/">States</a>
+                  </li>
+                  <li>
+                      <i data-feather="box" class="feather"></i>
+                      <a href="/modules/">Modules</a>
+                  </li>
+                  <li>
+                      <i data-feather="box" class="feather"></i>
+                      <a href="/module-template/">Module Template</a>
+                  </li>
+                  <li>
+                      <i data-feather="command" class="feather"></i>
+                      <a href="/providers/">Providers</a>
+                  </li>
+              </ul>
+              <ul class="list-unstyled components">
+                <h6>CLUSTER RESOURCES</h6>
+                <li class="active">
+                    <i data-feather="box" class="feather"></i>
+                    <a href="/cluster-module-template/">Cluster Module Template</a>
+                </li>
+                <li>
+                    <i data-feather="command" class="feather"></i>
+                    <a href="/cluster-providers/">Cluster Providers</a>
+                </li>
+            </ul>
+            {% endblock %}
+          </nav>
+          <div id="content">
+            {% block body %}{% endblock %}
+          </div>
+        </div>
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+      feather.replace();
+      $('#settings').popover();
+    </script>
+  </body>
+</html>

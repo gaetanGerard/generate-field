@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+    {% if pluralToPrint and namespace %}
+        <h1>{{pluralToPrint}}: {{namespace}}</h1>
+    {% elif namespace == None %}
+    <h1>Home</h1>
+    {% endif %}
+
+{% endblock %}
