@@ -63,7 +63,7 @@
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-primary edit">Edit</button>
                       </div>
                     </div>
                   </div>
@@ -157,6 +157,12 @@
     <script>
       feather.replace();
       $('#settings').popover();
+      $(document).ready(function () {
+        $('.edit').click(function () {
+          location.href = '/{{plural}}/{{namespace}}/edit'
+        })
+      })
     </script>
+    {% block editScript %}{% endblock %}
   </body>
 </html>

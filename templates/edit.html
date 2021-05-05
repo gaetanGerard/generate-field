@@ -1,7 +1,198 @@
 {% extends "base.html" %}
 
 {% block body %}
+<div class="cust-container">
+    <h1>Title</h1>
+    <form action="" class="form">
+        <div id="inputwrapper">
+            <div class="form-group">
+                <div class="cust-row parent">
+                    <div class="cust-col">
+                        <select class="form-control" id="typeSelect_1" placeholder="Type">
+                            <option disabled>Type</option>
+                            <option>String</option>
+                            <option>Int</option>
+                            <option>Array</option>
+                        </select>
+                    </div>
+                    <div class="cust-col">
+                        <input type="text" name="mytext[]" class="form-control" id="key_1" placeholder="Key">
+                    </div>
+                    <div class="cust-col value">
+                        <input type="text" name="mytext[]" class="form-control" id="value_1" placeholder="Value">
+                    </div>
+                    <div class="cust-col">
+                        <a href="#" class="addmorefieldbox btn btn-success" data-addbuttonid="1">+</a>
+                    </div>
+                    <div class="cust-col">
+                        <a href="#" class="removeclass btn btn-danger" data-removebuttonid="1">-</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 
-    <h1>Edit Page!</h1>
+{% endblock %}
 
+{% block editScript %}
+<script>
+    var inputWrapper = $("#inputwrapper");
+    var addButton = $(".addmorefieldbox");
+    var removeButton = $(".removeclass");
+
+    var x = inputWrapper.length;
+    var fieldCount = 1;
+
+    $(document).ready(function () {
+        $(this).click(function (e) {
+            // Function for add field element on click or remove those field
+            addFieldOnClick(e);
+        }).change(function(e) {
+            // Function for add child field on change and change field value attributes
+            // to string or int
+            switchAttrAndAddFieldOnChange(e)
+        })
+
+
+      })
+
+      function addFieldOnClick(e) {
+            var dataId = e.target.getAttribute("data-addbuttonid");
+            var getClass = e.target.getAttribute("class");
+            var addClass = getClass.includes("addmorefieldbox");
+            var addKidClass = getClass.includes("addmorefieldkid");
+            var removeClass = getClass.includes("removeclass");
+            fieldCount++;
+            if(addClass) {
+                // need to check if a addClass child was click for add a field under the clicked sibling
+                $(inputWrapper).append(
+                    `
+                        <div class="form-group">
+                            <div class="cust-row parent">
+                                <div class="cust-col">
+                                <select class="form-control" id="typeSelect_${fieldCount}" placeholder="Type">
+                                    <option disabled>Type</option>
+                                    <option>String</option>
+                                    <option>Int</option>
+                                    <option>Array</option>
+                                </select>
+                                </div>
+                                <div class="cust-col">
+                                    <input type="text" name="mytext[]" class="form-control" id="key_${fieldCount}" placeholder="Key">
+                                </div>
+                                <div class="cust-col value">
+                                    <input type="text" name="mytext[]" class="form-control" id="value_${fieldCount}" placeholder="Value">
+                                </div>
+                                <div class="cust-col">
+                                    <a href="#" class="addmorefieldbox btn btn-success" data-addbuttonid="${fieldCount}">+</a>
+                                </div>
+                                <div class="cust-col">
+                                    <a href="#" class="removeclass btn btn-danger" data-removebuttonid="${fieldCount}">-</a>
+                                </div>
+                             </div>
+                        </div>
+                    `
+                );
+                x++;
+            } else if(addKidClass) {
+                var parent = $(e.target).parent().parent().parent();
+                $(parent).append(
+                    `
+                        <div class="cust-row kid">
+                            <div class="cust-col">
+                                <select class="form-control" id="typeSelect_${fieldCount}" placeholder="Type">
+                                    <option disabled>Type</option>
+                                    <option>String</option>
+                                    <option>Int</option>
+                                    <!-- <option>Array</option> -->
+                                </select>
+                            </div>
+                            <div class="cust-col">
+                                <input type="text" name="mytext[]" class="form-control" id="key_${fieldCount}" placeholder="Key">
+                            </div>
+                            <div class="cust-col value">
+                                <input type="text" name="mytext[]" class="form-control" id="value_${fieldCount}" placeholder="Value">
+                            </div>
+                            <div class="cust-col">
+                                <a href="#" class="addmorefieldkid btn btn-success" data-addbuttonid="${fieldCount}">+</a>
+                            </div>
+                            <div class="cust-col">
+                                <a href="#" class="removeclass btn btn-danger" data-removebuttonid="${fieldCount}">-</a>
+                            </div>
+                        </div>
+                    `
+                );
+            } else if (removeClass) {
+                var isParent = $(e.target).parent().parent().hasClass("parent");
+                var parentLength = $(e.target).parent().parent().length;
+                // console.log(isParent);
+                // console.log(x);
+                removeItem(e, x, isParent);
+                if(isParent) x--;
+                if(x < 1 ) x = 1;
+            }
+      }
+
+      function switchAttrAndAddFieldOnChange(e) {
+            var dropdownValue = e.target.value;
+            var valueSibling = $(e.target).parent().siblings(".value").children();
+            var grandParent = $(e.target).parent().parent().parent();
+            var isParent = $(e.target).parent().parent().hasClass("parent");
+            var isChild = $(e.target).parent().parent().siblings();
+            if(dropdownValue == "String") {
+                $(valueSibling).attr("type", "text");
+                if(isParent) {
+                    $(isChild).remove();
+                }
+            } else if(dropdownValue == "Int") {
+                $(valueSibling).attr("type", "number");
+                if(isParent) {
+                    $(isChild).remove();
+                }
+            } else if (dropdownValue == "Array") {
+                $(valueSibling).attr("type", "text")
+                // alot of staff to do here
+                $(grandParent).append(
+                    `
+                        <div class="cust-row kid">
+                            <div class="cust-col">
+                                <select class="form-control" id="typeSelect_${fieldCount}" placeholder="Type">
+                                    <option disabled>Type</option>
+                                    <option>String</option>
+                                    <option>Int</option>
+                                    <!-- <option>Array</option> -->
+                                </select>
+                            </div>
+                            <div class="cust-col">
+                                <input type="text" name="mytext[]" class="form-control" id="key_${fieldCount}" placeholder="Key">
+                            </div>
+                            <div class="cust-col value">
+                                <input type="text" name="mytext[]" class="form-control" id="value_${fieldCount}" placeholder="Value">
+                            </div>
+                            <div class="cust-col">
+                                <a href="#" class="addmorefieldkid btn btn-success" data-addbuttonid="${fieldCount}">+</a>
+                            </div>
+                            <div class="cust-col">
+                                <a href="#" class="removeclass btn btn-danger" data-removebuttonid="${fieldCount}">-</a>
+                            </div>
+                        </div>
+                    `
+                );
+            } else {
+                //  if by any chance the user succeed to add an other type so do staff here
+            }
+      }
+
+      function removeItem (e, x, isParent) {
+            console.log(x)
+          if(isParent && x > 1) {
+            $(e.target).parent().parent().parent().remove();
+          } else  if (!isParent) {
+              $(e.target).parent().parent().remove();
+              console.log(isParent)
+          }
+      }
+
+</script>
 {% endblock %}

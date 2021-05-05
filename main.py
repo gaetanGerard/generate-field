@@ -38,8 +38,8 @@ def pluralNamespaced(plural, namespace):
         pluralToPrint = utils.pluralsTranslation(plural)
         return render_template("index.html", plural=plural, pluralToPrint=pluralToPrint, disable=disable, namespace=namespace, namespaces=namespaces)
 
-@app.route('/edit')
-def cluster():
+@app.route('/<plural>/<namespace>/edit')
+def cluster(plural, namespace):
     return render_template('edit.html')
 
     from flask import Flask

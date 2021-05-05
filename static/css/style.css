@@ -10,8 +10,8 @@ body {
 }
 
 #wrapper {
-    display: flex;
-    width: 100%;
+    display: grid;
+    grid-template-columns: 15% auto;
     height: 100%;
     color: white;
     background-color: #1C2A32 !important;
@@ -60,4 +60,42 @@ body {
 
 .btn-link:hover svg{
     color: #EF8C4D !important;
+}
+
+svg.feather.feather-plus {
+    color: white !important;
+    stroke-width: 3 !important;
+}
+
+#inputwrapper .form-group {
+    display: grid;
+    grid-auto-flow: row;
+    justify-content: center;
+    margin-bottom: 0 !important;
+}
+
+.cust-container {
+    text-align: center;
+    width: calc(100vw - 15%);
+    height: 100%;
+    padding: 50px 2%;
+}
+
+.addmorefieldbox, .addmorefieldkid, .removeclass {
+    width: 38px !important;
+    text-align: center !important;
+}
+
+.cust-row {
+    width: 100%;
+    display: grid;
+    grid-auto-flow: column;
+    gap: 5px;
+    margin-top: 5px;
+    justify-content: center;
+}
+
+.cust-row.kid {
+    justify-content: end;
+    grid-template-columns: 90px 152px 152px 38px 38px;
 }
