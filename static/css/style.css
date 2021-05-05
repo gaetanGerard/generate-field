@@ -99,3 +99,11 @@ svg.feather.feather-plus {
     justify-content: end;
     grid-template-columns: 90px 152px 152px 38px 38px;
 }
+
+.cust-row.parent .cust-col.value {
+    width: 200px !important;
+}
+
+.cust-row.kid .cust-col.value {
+    width: 152px !important;
+}

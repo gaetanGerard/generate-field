@@ -12,6 +12,7 @@
                             <option disabled>Type</option>
                             <option>String</option>
                             <option>Int</option>
+                            <option>Boolean</option>
                             <option>Array</option>
                         </select>
                     </div>
@@ -75,6 +76,7 @@
                                     <option disabled>Type</option>
                                     <option>String</option>
                                     <option>Int</option>
+                                    <option>Boolean</option>
                                     <option>Array</option>
                                 </select>
                                 </div>
@@ -105,6 +107,7 @@
                                     <option disabled>Type</option>
                                     <option>String</option>
                                     <option>Int</option>
+                                    <option>Boolean</option>
                                     <!-- <option>Array</option> -->
                                 </select>
                             </div>
@@ -137,21 +140,60 @@
       function switchAttrAndAddFieldOnChange(e) {
             var dropdownValue = e.target.value;
             var valueSibling = $(e.target).parent().siblings(".value").children();
+            var newValueSibling = $(e.target).parent().siblings(".value");
             var grandParent = $(e.target).parent().parent().parent();
             var isParent = $(e.target).parent().parent().hasClass("parent");
             var isChild = $(e.target).parent().parent().siblings();
+            var boolSelectValue = $(e.target).parent().siblings(".value").children().hasClass("boolSelectValue");
             if(dropdownValue == "String") {
                 $(valueSibling).attr("type", "text");
+                if(boolSelectValue) {
+                    $(valueSibling).remove();
+                    $(newValueSibling).append(
+                        `
+                        <input type="text" name="mytext[]" class="form-control" id="value_${fieldCount}" placeholder="Value">
+                        `
+                    );
+                }
                 if(isParent) {
                     $(isChild).remove();
                 }
             } else if(dropdownValue == "Int") {
                 $(valueSibling).attr("type", "number");
+                if(boolSelectValue) {
+                    $(valueSibling).remove();
+                    $(newValueSibling).append(
+                        `
+                        <input type="text" name="mytext[]" class="form-control" id="value_${fieldCount}" placeholder="Value">
+                        `
+                    );
+                }
+                if(isParent) {
+                    $(isChild).remove();
+                }
+            } else if (dropdownValue == "Boolean") {
+                $(valueSibling).remove();
+                $(newValueSibling).append(
+                    `
+                        <select class="form-control boolSelectValue" id="boolSelect_${fieldCount}" placeholder="Boolean">
+                            <option>True</option>
+                            <option>False</option>
+                        </select>
+                    `
+                );
                 if(isParent) {
                     $(isChild).remove();
                 }
             } else if (dropdownValue == "Array") {
                 $(valueSibling).attr("type", "text")
+                if(boolSelectValue) {
+                    $(valueSibling).remove();
+                    $(newValueSibling).append(
+                        `
+                        <input type="text" name="mytext[]" class="form-control" id="value_${fieldCount}" placeholder="Value">
+                        `
+                    );
+                }
                 // alot of staff to do here
                 $(grandParent).append(
                     `
@@ -161,6 +203,7 @@
                                     <option disabled>Type</option>
                                     <option>String</option>
                                     <option>Int</option>
+                                    <option>Boolean</option>
                                     <!-- <option>Array</option> -->
                                 </select>
                             </div>
